@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="form_auth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:background">@drawable/form_auth_rounded</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">24dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginHorizontal" tools:targetApi="26">32dp</item>
+        <item name="android:elevation">6dp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/btn_rounded</item>
+        <item name="android:fontFamily">@font/roboto_flex</item>
+    </style>
+
+    <style name="text_title_auth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/roboto_flex</item>
+    </style>
+
+    <style name="text_auth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto_flex</item>
+    </style>
+
+    <style name="edt_text_auth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:background">@drawable/edt_rounded</item>
+        <item name="android:padding">10sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+</resources>
