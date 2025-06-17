@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_auth_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_mylist"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/title_app_name"/>
+
+    <LinearLayout
+        style="@style/form_auth">
+
+        <TextView
+            style="@style/text_title_auth"
+            android:text="ĐĂNG KÝ"
+            android:layout_margin="3sp"
+            android:gravity="center"
+            />
+
+        <TextView
+            style="@style/text_auth"
+            android:text="Tên đăng nhập" />
+
+        <EditText
+            android:id="@+id/edtUsername"
+            style="@style/edt_text_auth" />
+
+        <TextView
+            style="@style/text_auth"
+            android:text="Email" />
+
+        <EditText
+            android:id="@+id/edtEmail"
+            style="@style/edt_text_auth" />
+
+        <TextView
+            style="@style/text_auth"
+            android:text="Mật khẩu" />
+
+        <EditText
+            android:id="@+id/edtPassword"
+            style="@style/edt_text_auth" />
+
+        <TextView
+            style="@style/text_auth"
+            android:text="Xác nhận mật khẩu" />
+
+        <EditText
+            android:id="@+id/edtRePassword"
+            style="@style/edt_text_auth" />
+
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:text="ĐĂNG KÝ"
+            android:layout_marginTop="20sp"
+            style="@style/button"/>
+
+    </LinearLayout>
+</LinearLayout>

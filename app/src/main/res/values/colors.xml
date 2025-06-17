@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="form_main">#27343f</color>
+    <color name="btn">#39464f</color>
+    <color name="text">#f7f5ec</color>
+    <color name="edt_text">#394650</color>
+    <color name="drak_red">#a43842</color>
+    <color name="pale_cream">#f5f3e9</color>
 </resources>
