@@ -16,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mylist.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException; // Import thêm để xử lý lỗi email đã tồn tại
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText edtUsername, edtEmail, edtPassword, edtRePassword;
     private Button btnRegister;
     private DatabaseReference userRef;
+    private FirebaseAuth mAuth; // Thêm biến FirebaseAuth
     private static final String TAG = "RegisterActivity";
 
     @Override
@@ -50,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initFirebase() {
         userRef = FirebaseDatabase.getInstance().getReference("Users");
+        mAuth = FirebaseAuth.getInstance(); // Khởi tạo FirebaseAuth
     }
 
     private void setListener() {
@@ -113,73 +118,70 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setEnabled(false);
         btnRegister.setText("Đang đăng ký...");
 
-        checkUserExists(username, email, password);
+        // **Chỉ kiểm tra tên đăng nhập trong Realtime Database**
+        // Email sẽ được Firebase Auth kiểm tra trùng lặp
+        checkUsernameExists(username, email, password);
     }
 
-    private void checkUserExists(String username, String email, String password) {
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean usernameExists = false;
-                boolean emailExists = false;
-
-                for (DataSnapshot userSnap : snapshot.getChildren()) {
-                    User user = userSnap.getValue(User.class);
-                    if (user != null) {
-                        if (user.getUsername() != null && user.getUsername().equalsIgnoreCase(username)) {
-                            usernameExists = true;
-                        }
-                        if (user.getEmail() != null && user.getEmail().equalsIgnoreCase(email)) {
-                            emailExists = true;
+    private void checkUsernameExists(String username, String email, String password) {
+        userRef.orderByChild("username").equalTo(username) // Chỉ kiểm tra username
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            ShowMessage("Tên đăng nhập đã tồn tại!");
+                            resetRegisterButton();
+                        } else {
+                            createUserWithFirebaseAuth(username, email, password);
                         }
                     }
-                }
 
-                if (usernameExists) {
-                    ShowMessage("Tên đăng nhập đã tồn tại!");
-                    resetRegisterButton();
-                    return;
-                }
-
-                if (emailExists) {
-                    ShowMessage("Email đã được sử dụng!");
-                    resetRegisterButton();
-                    return;
-                }
-
-                createNewUser(username, email, password);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "checkUserExists:cancelled", error.toException());
-                ShowMessage("Lỗi kết nối cơ sở dữ liệu: " + error.getMessage());
-                resetRegisterButton();
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w(TAG, "checkUsernameExists:cancelled", error.toException());
+                        ShowMessage("Lỗi kết nối cơ sở dữ liệu: " + error.getMessage());
+                        resetRegisterButton();
+                    }
+                });
     }
 
-    private void createNewUser(String username, String email, String password) {
-        Integer newUserId = (int) System.currentTimeMillis();
-
-        User newUser = new User(newUserId, username, email, password);
-
-        userRef.child(String.valueOf(newUserId)).setValue(newUser)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+    private void createUserWithFirebaseAuth(String username, String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            ShowMessage("Đăng ký thành công!");
+                            Log.d(TAG, "createUserWithEmail:success");
+                            String uid = mAuth.getCurrentUser().getUid();
 
-                            goToLoginActivity();
+                            User newUser = new User(uid, username, email, "");
+                            userRef.child(uid).setValue(newUser)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> dbTask) {
+                                            if (dbTask.isSuccessful()) {
+                                                ShowMessage("Đăng ký thành công!");
+                                                goToLoginActivity();
+                                            } else {
+                                                Log.w(TAG, "saveUserToDatabase:failure", dbTask.getException());
+                                                ShowMessage("Đăng ký tài khoản thành công nhưng không lưu được thông tin bổ sung.");
+                                                resetRegisterButton();
+                                            }
+                                        }
+                                    });
                         } else {
-                            Log.w(TAG, "createUser:failure", task.getException());
-                            ShowMessage("Đăng ký thất bại. Vui lòng thử lại!");
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                ShowMessage("Email này đã được đăng ký với tài khoản khác!");
+                            } else {
+                                ShowMessage("Đăng ký thất bại: " + task.getException().getMessage());
+                            }
                             resetRegisterButton();
                         }
                     }
                 });
     }
+
 
     private boolean isValidEmail(String email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
