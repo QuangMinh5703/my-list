@@ -12,6 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mylist.Model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edtUsername, edtPassword;
     private Button btnLogin;
     private DatabaseReference userRef;
-
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle saveInstanceState) {
@@ -36,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         setListener();
     }
 
-
     private void initView() {
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
         tvRegister = findViewById(R.id.tvRegister);
@@ -47,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initFirebase() {
         userRef = FirebaseDatabase.getInstance().getReference("Users");
+        mAuth = FirebaseAuth.getInstance(); // Khởi tạo FirebaseAuth
     }
 
     private void setListener() {
@@ -94,50 +100,86 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-
         btnLogin.setEnabled(false);
         btnLogin.setText("Đang đăng nhập...");
 
+        findEmailByUsername(username, password);
+    }
 
-        loginWithEmailAndPassword(username, password);
+    private void findEmailByUsername(String username, String password) {
+        userRef.orderByChild("username").equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            DataSnapshot userSnapshot = snapshot.getChildren().iterator().next();
+                            User user = userSnapshot.getValue(User.class);
+
+                            if (user != null && user.getEmail() != null) {
+                                loginWithFirebaseAuth(user.getEmail(), password);
+                            } else {
+                                ShowMessage("Không thể lấy thông tin email từ username.");
+                                resetLoginButton();
+                            }
+                        } else {
+                            ShowMessage("Tên đăng nhập không tồn tại.");
+                            resetLoginButton();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        ShowMessage("Lỗi kết nối cơ sở dữ liệu: " + error.getMessage());
+                        resetLoginButton();
+                    }
+                });
     }
 
 
-    private void loginWithEmailAndPassword(String username, String password) {
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean loginSuccess = false;
-                User currentUser = null;
-                for (DataSnapshot userSnap : snapshot.getChildren()) {
-                    User user = userSnap.getValue(User.class);
+    private void loginWithFirebaseAuth(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            String uid = mAuth.getCurrentUser().getUid();
 
-                    if (user != null && user.getUsername() != null && user.getPassword() != null) {
-                        if (username.equalsIgnoreCase(user.getUsername()) &&
-                                password.equals(user.getPassword())) {
-                            loginSuccess = true;
-                            currentUser = user;
-                            break;
+                            userRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    User currentUser = snapshot.getValue(User.class);
+                                    if (currentUser != null) {
+                                        ShowMessage("Đăng nhập thành công!");
+                                        goToMainActivity(currentUser.getId());
+                                    } else {
+                                        ShowMessage("Đăng nhập thành công tài khoản hoặc mật khẩu không đúng.");
+                                        mAuth.signOut();
+                                    }
+                                    resetLoginButton();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    ShowMessage("Lỗi khi tải thông tin người dùng: " + error.getMessage());
+                                    mAuth.signOut();
+                                    resetLoginButton();
+                                }
+                            });
+
+                        } else {
+                            resetLoginButton();
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthInvalidUserException e) {
+                                ShowMessage("Tài khoản không tồn tại. Vui lòng đăng ký.");
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                ShowMessage("Mật khẩu không đúng. Vui lòng kiểm tra lại.");
+                            } catch (Exception e) {
+                                ShowMessage("Đăng nhập thất bại: " + e.getMessage());
+                            }
                         }
                     }
-                }
-
-                if (loginSuccess && currentUser != null) {
-                    ShowMessage("Đăng nhập thành công!");
-                    goToMainActivity(currentUser.getId());
-                } else {
-                    ShowMessage("Tài khoản hoặc mật khẩu không đúng!");
-                }
-
-                resetLoginButton();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                ShowMessage("Lỗi kết nối cơ sở dữ liệu: " + error.getMessage());
-                resetLoginButton();
-            }
-        });
+                });
     }
 
     private void resetLoginButton() {
@@ -145,9 +187,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setText("ĐĂNG NHẬP");
     }
 
-    private void goToMainActivity(Integer id) {
+    private void goToMainActivity(String uid) {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("id", id);
+        intent.putExtra("uid", uid);
         startActivity(intent);
         finish();
     }

@@ -1,7 +1,7 @@
 package com.example.mylist.Model;
 
 public class User {
-    private Integer id;
+    private String id;
     private String username;
     private String email;
     private String password;
@@ -10,18 +10,18 @@ public class User {
 
     }
 
-    public User(Integer id, String username, String email, String password) {
+    public User(String id, String username, String email, String password) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
