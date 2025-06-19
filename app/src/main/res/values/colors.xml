@@ -8,4 +8,7 @@
     <color name="edt_text">#394650</color>
     <color name="drak_red">#a43842</color>
     <color name="pale_cream">#f5f3e9</color>
+    <color name="light_text">#E0E0E0</color>
+    <color name="showdown_text">#000000</color>
+    <color name="raking">#AB0000</color>
 </resources>
