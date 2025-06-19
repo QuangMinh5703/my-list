@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_menu"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:elevation="8dp">
+
+    <LinearLayout
+        android:id="@+id/btn_home"
+        android:layout_width="0sp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="2dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_home"
+            app:tint="@color/text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang chủ"
+            android:textSize="10sp"
+            android:textColor="@color/text"
+            android:layout_marginTop="1dp"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <!-- Button Hồ sơ -->
+    <LinearLayout
+        android:id="@+id/btn_profile"
+        android:layout_width="0sp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="2dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_settings"
+            app:tint="@color/text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hồ sơ"
+            android:textSize="10sp"
+            android:textColor="@color/text"
+            android:layout_marginTop="1dp"
+            android:gravity="center" />
+    </LinearLayout>
+
+</LinearLayout>
