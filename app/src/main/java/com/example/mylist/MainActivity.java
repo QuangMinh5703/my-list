@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +31,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnGenre;
     private ImageButton btnSearch;
     private TextView tvHeaderTitle;
     LinearLayout  btnHome, btnProfile;
@@ -198,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
         View header = findViewById(R.id.home_header);
         recyclerViewSections = findViewById(R.id.recyclerViewSections);
         btnSearch = header.findViewById(R.id.btnSearch);
-        btnGenre = header.findViewById(R.id.btnGenre);
         tvHeaderTitle = header.findViewById(R.id.tvHeaderTitle);
         View menu = findViewById(R.id.menu_home);
         btnHome = menu.findViewById(R.id.btn_home);

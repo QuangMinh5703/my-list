@@ -21,28 +21,13 @@
             <TextView
                 android:id="@+id/tvHeaderTitle"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="Dành cho Deadline and Stress"
                 android:textColor="@color/text"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btnGenre"
-                style="@style/button_home_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:drawableEnd="@drawable/chevron_down_solid"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/text"
-                android:paddingStart="16dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="4dp"
-                android:text="Thể loại" />
 
         </LinearLayout>
 
