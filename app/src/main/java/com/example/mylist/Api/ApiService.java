@@ -1,7 +1,7 @@
 package com.example.mylist.Api;
 
-import com.example.mylist.Model.Movie;
 import com.example.mylist.Model.ResponseMovie;
+import com.example.mylist.Model.ResponseSearch;
 import com.example.mylist.Model.ResponseSection;
 import com.example.mylist.Model.Section;
 
@@ -20,8 +20,9 @@ public interface ApiService {
     @GET("the-loai")
     Call<List<Section>> getSections();
 
-    @GET("https://phimapi.com/v1/api/the-loai/{genre}")
+    @GET("v1/api/the-loai/{genre}")
     Call<ResponseSection> getMoviesByGenre(@Path("genre") String genre);
 
-
+    @GET("v1/api/tim-kiem")
+    Call<ResponseSearch> searchMovies(@Query("keyword") String keyword);
 }

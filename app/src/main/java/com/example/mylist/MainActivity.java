@@ -1,14 +1,18 @@
 package com.example.mylist;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +26,6 @@ import com.example.mylist.Model.Section;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,9 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnGenre;
     private ImageButton btnSearch;
+    private TextView tvHeaderTitle;
+    LinearLayout  btnHome, btnProfile;
     private RecyclerView recyclerViewSections;
     private ApiService apiService;
     private SectionAdapter sectionAdapter;
+    private NestedScrollView scrollView;
 
     List<Section> sectionList = new ArrayList<>();
 
@@ -43,25 +49,47 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_home_main);
+
+        Intent intent = new Intent();
+        String uid = intent.getStringExtra("uid");
+        String userName = intent.getStringExtra("username");
         
         initView();
         setupApiService();
         listener();
         loadData();
+        tvHeaderTitle.setText(userName);
     }
 
     private void listener() {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "message", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (scrollView != null) {
+                    scrollView.smoothScrollTo(0, 0);
+                }
+            }
+        });
+
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
 
     private void loadData() {
-
-        // 1. Gọi API lấy phim mới cập nhật
         apiService.getNewMovies(1).enqueue(new Callback<ResponseMovie>() {
             @Override
             public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
@@ -97,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                     List<Section> genreSections = response.body();
 
                     if (genreSections.isEmpty()) {
-                        // Chỉ có section phim mới
                         setupRecyclerView(sectionList);
                         return;
                     }
@@ -106,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     Log.e("API_ERROR", "Failed to get genre sections: " + response.code());
-                    // Setup với những gì đã có (có thể chỉ có section phim mới)
                     setupRecyclerView(sectionList);
                 }
             }
@@ -114,32 +140,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Section>> call, Throwable t) {
                 Log.e("API_ERROR", "Failed to get genre sections", t);
-                // Setup với những gì đã có
                 setupRecyclerView(sectionList);
             }
         });
     }
 
     private void loadMoviesForGenreSections(List<Section> genreSections, int currentIndex) {
-        // Kiểm tra đã xử lý hết danh sách chưa
         if (currentIndex >= genreSections.size()) {
-            // Hoàn thành - Setup RecyclerView với tất cả sections
             setupRecyclerView(sectionList);
             return;
         }
 
         Section currentSection = genreSections.get(currentIndex);
 
-        // Lấy phim cho thể loại hiện tại
         apiService.getMoviesByGenre(currentSection.getSlug()).enqueue(new Callback<ResponseSection>() {
             @Override
             public void onResponse(Call<ResponseSection> call, Response<ResponseSection> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Movie> movies = response.body().getData().getData();
                     if (movies != null && !movies.isEmpty()) {
-                        // Gán danh sách phim vào section
                         currentSection.setMovies(movies);
-                        // Thêm vào sectionList
                         sectionList.add(currentSection);
                     } else {
                         Log.w("API_WARNING", "No movies found for genre: " + currentSection.getSlug());
@@ -149,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
                             ", Response code: " + response.code());
                 }
 
-                // Tiếp tục với thể loại tiếp theo
                 loadMoviesForGenreSections(genreSections, currentIndex + 1);
             }
 
@@ -157,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<ResponseSection> call, Throwable t) {
                 Log.e("API_ERROR", "Failed to get movies for genre: " + currentSection.getSlug(), t);
 
-                // Tiếp tục với thể loại tiếp theo dù có lỗi
                 loadMoviesForGenreSections(genreSections, currentIndex + 1);
             }
         });
@@ -176,9 +194,14 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("WrongViewCast")
     private void initView() {
+        scrollView = findViewById(R.id.scroll_content);
         View header = findViewById(R.id.home_header);
         recyclerViewSections = findViewById(R.id.recyclerViewSections);
         btnSearch = header.findViewById(R.id.btnSearch);
         btnGenre = header.findViewById(R.id.btnGenre);
+        tvHeaderTitle = header.findViewById(R.id.tvHeaderTitle);
+        View menu = findViewById(R.id.menu_home);
+        btnHome = menu.findViewById(R.id.btn_home);
+        btnProfile = menu.findViewById(R.id.btn_profile);
     }
 }

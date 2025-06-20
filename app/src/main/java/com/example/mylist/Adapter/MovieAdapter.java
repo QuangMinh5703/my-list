@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,11 +37,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private static final String IMAGE_BASE_URL = "https://phimimg.com/";
 
     public interface OnMovieClickListener {
-        void onMovieClick(Movie movie);
-
-        void onWatchClick(Movie movie);
-
-        void onInfoClick(Movie movie);
+        void onClick(Movie movie, View view);
     }
 
     public MovieAdapter(List<Movie> movies, Context context) {
@@ -74,7 +71,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.movies = newMovies;
     }
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+    public class MovieViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imageViewPoster;
         private TextView tvTitle, tvSubtitle, tvRating;
@@ -86,30 +83,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvSubtitle = itemView.findViewById(R.id.tvSubtitle);
             tvRating = itemView.findViewById(R.id.tvRating);
-
-            tvTitle.setOnClickListener(v -> {
-                // Handle title click
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    // Xử lý click event
-                }
-            });
-
-            tvSubtitle.setOnClickListener(v -> {
-                // Handle subtitle click
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    // Xử lý click event
-                }
-            });
-
-            // Thêm click listener cho poster
-            imageViewPoster.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    // Xử lý click event cho poster
-                }
-            });
         }
 
         @SuppressLint("SetTextI18n")
@@ -119,6 +92,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             tvSubtitle.setText(movie.getYear());
 
             loadMoviePoster(context, movie.getImageUrl());
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) listener.onClick(movie, v);
+            });
         }
 
         private void loadMoviePoster(Context context, String imageUrl) {

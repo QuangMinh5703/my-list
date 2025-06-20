@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -69,6 +70,9 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
                 recyclerViewItems.setAdapter(movieAdapter);
                 recyclerViewItems.setHasFixedSize(true);
                 recyclerViewItems.setItemViewCacheSize(20);
+                movieAdapter.setOnMovieClickListener((movie, view) -> {
+                    Toast.makeText(context, "Play: " + movie.getName(), Toast.LENGTH_SHORT).show();
+                });
             } else {
                 movieAdapter.updateMovies(section.getMovies());
             }

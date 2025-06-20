@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                                     User currentUser = snapshot.getValue(User.class);
                                     if (currentUser != null) {
                                         ShowMessage("Đăng nhập thành công!");
-                                        goToMainActivity(currentUser.getId());
+                                        goToMainActivity(currentUser.getId(), currentUser.getUsername());
                                     } else {
                                         ShowMessage("Đăng nhập thành công tài khoản hoặc mật khẩu không đúng.");
                                         mAuth.signOut();
@@ -187,9 +187,10 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setText("ĐĂNG NHẬP");
     }
 
-    private void goToMainActivity(String uid) {
+    private void goToMainActivity(String uid, String userName) {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("uid", uid);
+        intent.putExtra("username", userName);
         startActivity(intent);
         finish();
     }

@@ -11,4 +11,8 @@
     <color name="light_text">#E0E0E0</color>
     <color name="showdown_text">#000000</color>
     <color name="raking">#AB0000</color>
+    <color name="btn_search">#174156</color>
+    <color name="text_hint">#B0B0B0</color>
+    <color name="divider">#3A4A58</color>
+    <color name="highlight">#FFD369</color>
 </resources>
