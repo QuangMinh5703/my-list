@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
@@ -45,12 +44,13 @@ public class MainActivity extends AppCompatActivity {
     List<Section> sectionList = new ArrayList<>();
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_home_main);
 
-        Intent intent = new Intent();
+        Intent intent = getIntent();;
         String uid = intent.getStringExtra("uid");
         String userName = intent.getStringExtra("username");
         
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setupApiService();
         listener();
         loadData();
-        tvHeaderTitle.setText(userName);
+        tvHeaderTitle.setText("Dành cho " + userName);
     }
 
     private void listener() {
