@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -11,21 +13,35 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Button btnLogout, btnChangePassword;
     LinearLayout btnHome1;
+    private TextView tvUserName;
 
     @Override
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
-        setContentView(R.layout.profile);
+        setContentView(R.layout.activity_profile);
+
+        Intent intent = getIntent();;
+        String userName = intent.getStringExtra("username");
+
+        initView();
+        listener();
+        tvUserName.setText(userName);
+}
+    private void initView() {
+        View menu = findViewById(R.id.menu_profile);
+        btnHome1 = menu.findViewById(R.id.btn_home);
         btnLogout = findViewById(R.id.btn_logout);
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        tvUserName = findViewById(R.id.tvUsername);
+        btnChangePassword = findViewById(R.id.btn_change_password);
+    }
+
+    private void listener() {
+        btnHome1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+            public void onClick(View v) {
+                finish();
             }
         });
-
-        btnChangePassword = findViewById(R.id.btn_change_password);
 
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,20 +52,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        initView();
-        listener();
-}
-    private void initView() {
-        View menu = findViewById(R.id.menu_profile);
-        btnHome1 = menu.findViewById(R.id.btn_home);
-    }
-
-    private void listener() {
-        btnHome1.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                finish();
-
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
             }
         });
 

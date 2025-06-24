@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();;
         String uid = intent.getStringExtra("uid");
         String userName = intent.getStringExtra("username");
-        
+
         initView();
         setupApiService();
         listener();
@@ -80,9 +80,7 @@ public class MainActivity extends AppCompatActivity {
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
-
+                goToProfileActivity(tvHeaderTitle.getText().toString().trim());
             }
         });
     }
@@ -188,6 +186,12 @@ public class MainActivity extends AppCompatActivity {
         sectionAdapter = new SectionAdapter(sectionList, this);
         recyclerViewSections.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewSections.setAdapter(sectionAdapter);
+    }
+
+    private void goToProfileActivity(String userName) {
+        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+        intent.putExtra("username", userName);
+        startActivity(intent);
     }
 
     @SuppressLint("WrongViewCast")

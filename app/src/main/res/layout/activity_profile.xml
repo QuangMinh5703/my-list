@@ -2,31 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#121212">
+    android:background="@drawable/background_mylist"
+    android:padding="16dp">
 
     <LinearLayout
+        android:id="@+id/top_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:orientation="vertical"
-        android:background="@drawable/background_mylist"
         android:gravity="center_horizontal">
 
-        <!-- Avatar -->
-
-        <!-- Username -->
         <TextView
-            android:id="@+id/text_username1"
+            android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đang tải tên người dùng..."
-            android:textColor="#FFFFFF"
+            android:textColor="@color/text"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-
-
-        <!-- Buttons -->
         <Button
             android:id="@+id/btn_change_password"
             android:layout_width="match_parent"
@@ -44,21 +39,16 @@
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/raking"
             android:textColor="@color/text" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <include
-            android:id="@+id/menu_profile"
-            layout="@layout/activity_home_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            android:elevation="10dp" />
-
     </LinearLayout>
+
+    <!-- Menu ở dưới cùng -->
+    <include
+        android:id="@+id/menu_profile"
+        layout="@layout/activity_home_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:elevation="10dp" />
+
 </RelativeLayout>
