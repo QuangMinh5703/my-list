@@ -1,3 +1,15 @@
 <resources>
     <string name="title_my_list">My List</string>
+    <string name="movie_description_title">Mô tả</string>
+    <string name="suggestions_title">Gợi ý cho bạn</string>
+    <string name="play_video">Phát video</string>
+    <string name="back_button">Quay lại</string>
+    <string name="loading_video">Đang tải video...</string>
+    <string name="opening_movie">Đang mở phim...</string>
+    <string name="no_video_player">Không tìm thấy ứng dụng phát video</string>
+
+    <!-- Content descriptions for accessibility -->
+    <string name="video_thumbnail_desc">Hình thu nhỏ video</string>
+    <string name="play_button_desc">Nút phát video</string>
+    <string name="movie_poster_desc">Poster phim</string>
 </resources>
