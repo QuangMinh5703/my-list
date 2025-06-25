@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import retrofit2.Response;
 
 public class PlayMovieActivity extends AppCompatActivity {
     private TextView tvNameMovie, tvMovieDescription;
+    private Button btnNextEpisode, btnFullscreen;
     private PlayerView vdView;
     private ImageView btnBack;
     private ApiService apiService;
@@ -43,6 +45,8 @@ public class PlayMovieActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private int nPosition = 0;
     private EpisodesAdapter adapter;
+    private List<ServerData> allServerData = new ArrayList<>();
+    private boolean isFullscreen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +95,7 @@ public class PlayMovieActivity extends AppCompatActivity {
                             setupVideoPlayer(videoUrl);
                         }
 
-                        List<ServerData> allServerData = new ArrayList<>();
+                        allServerData = new ArrayList<>();
                         for (Episode episode : episodes) {
                             if (episode.getData() != null) {
                                 allServerData.addAll(episode.getData());
@@ -200,6 +204,8 @@ public class PlayMovieActivity extends AppCompatActivity {
         vdView = findViewById(R.id.playerView);
         btnBack = findViewById(R.id.btnBackHome);
         recyclerView = findViewById(R.id.rvEpisodes);
+        btnNextEpisode = findViewById(R.id.btnNextEpisode);
+        btnFullscreen = findViewById(R.id.btnFullscreen);
     }
 
     private void setupApiService() {
@@ -208,6 +214,25 @@ public class PlayMovieActivity extends AppCompatActivity {
 
     private void listener() {
         btnBack.setOnClickListener(v -> finish());
+
+        btnNextEpisode.setOnClickListener(v -> {
+            if (nPosition < adapter.getItemCount() && nPosition != 0) {
+                nPosition++;
+
+                String nextUrl = allServerData.get(nPosition).getUrl();
+                adapter.setSelectedPosition(nPosition);
+                updateMovie(nPosition, nextUrl);
+            } else {
+                Toast.makeText(this, "Đây là tập cuối cùng!", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        btnFullscreen.setOnClickListener(v -> {
+            if (!isFullscreen) {
+                Toast.makeText(this, "Chưa xong tính năng này!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

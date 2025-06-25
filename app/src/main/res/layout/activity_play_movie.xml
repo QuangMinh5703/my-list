@@ -57,6 +57,38 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnNextEpisode"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="▶ Tập tiếp"
+            android:textSize="10sp"
+            android:textColor="@color/text"
+            android:backgroundTint="@color/edt_text"
+            android:layout_marginEnd="8dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp" />
+
+        <Button
+            android:id="@+id/btnFullscreen"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="⛶ Toàn màn hình"
+            android:textSize="10sp"
+            android:textColor="@color/text"
+            android:backgroundTint="@color/edt_text"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
