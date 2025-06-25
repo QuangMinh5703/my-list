@@ -103,7 +103,50 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setEnabled(false);
         btnLogin.setText("Đang đăng nhập...");
 
+        if (username.equals("admin"))
+        {
+            loginAdmin(password);
+            return;
+        }
+
         findEmailByUsername(username, password);
+    }
+
+    private void loginAdmin( String password)
+    {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean found = false;
+
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    String username = userSnapshot.child("username").getValue(String.class);
+                    String passwordInDb = userSnapshot.child("password").getValue(String.class);
+
+                    if ("admin".equals(username)) {
+                        found = true;
+                        if (password != null && password.equals(passwordInDb)) {
+                            Toast.makeText(getApplicationContext(), "Đăng nhập admin thành công", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Mật khẩu admin sai", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    Toast.makeText(getApplicationContext(), "Không tìm thấy tài khoản admin", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Lỗi Firebase: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void findEmailByUsername(String username, String password) {

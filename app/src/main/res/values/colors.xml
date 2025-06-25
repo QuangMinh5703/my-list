@@ -15,4 +15,9 @@
     <color name="text_hint">#B0B0B0</color>
     <color name="divider">#3A4A58</color>
     <color name="highlight">#FFD369</color>
+    <color name="colorPrimary">#1a1a1a</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#FF6B35</color>
+    <color name="delete">#AB0000</color>
+
 </resources>
