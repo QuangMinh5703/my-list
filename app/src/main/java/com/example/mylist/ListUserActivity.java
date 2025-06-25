@@ -105,8 +105,12 @@ public class ListUserActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userList.clear(); // Xóa danh sách cũ trước khi thêm dữ liệu mới
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    User user = snapshot.getValue(User.class); // Giả sử User có constructor phù hợp
-                    userList.add(user); // Thêm người dùng vào danh sách
+                    User user = snapshot.getValue(User.class);
+                    if (user != null && user.getUsername() != null) {
+                        if (!user.getUsername().equals("admin")) {
+                            userList.add(user); // Thêm user không phải admin
+                        }
+                    }
                 }
                 userAdapter.notifyDataSetChanged(); // Cập nhật adapter
             }
