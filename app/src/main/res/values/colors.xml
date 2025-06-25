@@ -18,14 +18,6 @@
     <color name="colorPrimary">#1a1a1a</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF6B35</color>
+    <color name="delete">#AB0000</color>
 
-    <!-- App specific colors -->
-    <color name="background_dark">#1a1a1a</color>
-    <color name="surface_dark">#2d2d2d</color>
-    <color name="surface_light">#3d3d3d</color>
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#CCCCCC</color>
-    <color name="overlay_dark">#80000000</color>
-    <color name="overlay_gradient_start">#00000000</color>
-    <color name="overlay_gradient_end">#40000000</color>
 </resources>
