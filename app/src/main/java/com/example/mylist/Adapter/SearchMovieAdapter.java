@@ -1,6 +1,7 @@
 package com.example.mylist.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.mylist.Model.Movie;
+import com.example.mylist.PlayMovieActivity;
 import com.example.mylist.R;
 
 import java.util.List;
@@ -76,7 +78,9 @@ public class SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Clicked: " + movie.getName(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, PlayMovieActivity.class);
+                    intent.putExtra("Slug", movie.getSlug());
+                    context.startActivity(intent);
                 }
             });
         }

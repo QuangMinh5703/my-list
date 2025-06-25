@@ -19,5 +19,6 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF6B35</color>
     <color name="delete">#AB0000</color>
-
+    <color name="blue_episode">#2196F3</color>
+    <color name="blue_accent">#2196F3</color>
 </resources>

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_home_main);
 
-        Intent intent = getIntent();;
+        Intent intent = getIntent();
         String uid = intent.getStringExtra("uid");
         String userName = intent.getStringExtra("username");
 
