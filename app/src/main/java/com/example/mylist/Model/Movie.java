@@ -7,6 +7,10 @@ public class Movie {
     private String id;
     @SerializedName("name")
     private String name;
+    @SerializedName("slug")
+    private String slug;
+    @SerializedName("content")
+    private String content;
     @SerializedName("poster_url")
     private String imageUrl;
     @SerializedName("tmdb")
@@ -43,6 +47,14 @@ public class Movie {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public void setImageUrl(String imageUrl) {

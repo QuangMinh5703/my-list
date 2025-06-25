@@ -1,6 +1,7 @@
 package com.example.mylist.Api;
 
 import com.example.mylist.Model.ResponseMovie;
+import com.example.mylist.Model.ResponsePlayMovie;
 import com.example.mylist.Model.ResponseSearch;
 import com.example.mylist.Model.ResponseSection;
 import com.example.mylist.Model.Section;
@@ -25,4 +26,7 @@ public interface ApiService {
 
     @GET("v1/api/tim-kiem")
     Call<ResponseSearch> searchMovies(@Query("keyword") String keyword);
+
+    @GET("phim/{slug}")
+    Call<ResponsePlayMovie> getMovieBySlug(@Path("slug") String slug);
 }

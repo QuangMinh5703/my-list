@@ -36,7 +36,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private static final String IMAGE_BASE_URL = "https://phimimg.com/";
 
     public interface OnMovieClickListener {
-        void onClick(Movie movie, View view);
+        void onMovieClick(Movie movie, Context context);
     }
 
     public MovieAdapter(List<Movie> movies, Context context) {
@@ -93,7 +93,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             loadMoviePoster(context, movie.getImageUrl());
 
             itemView.setOnClickListener(v -> {
-                if (listener != null) listener.onClick(movie, v);
+                if (listener != null) {
+                    listener.onMovieClick(movie, context);
+                }
             });
         }
 
