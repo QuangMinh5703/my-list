@@ -1,16 +1,17 @@
 package com.example.mylist.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mylist.PlayMovieActivity;
 import com.example.mylist.Model.Section;
 import com.example.mylist.R;
 
@@ -69,8 +70,10 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
                 recyclerViewItems.setAdapter(movieAdapter);
                 recyclerViewItems.setHasFixedSize(true);
                 recyclerViewItems.setItemViewCacheSize(20);
-                movieAdapter.setOnMovieClickListener((movie, view) -> {
-                    Toast.makeText(context, "Play: " + movie.getName(), Toast.LENGTH_SHORT).show();
+                movieAdapter.setOnMovieClickListener((movie, ctx) -> {
+                    Intent intent = new Intent(ctx, PlayMovieActivity.class);
+                    intent.putExtra("Slug", movie.getSlug());
+                    ctx.startActivity(intent);
                 });
             } else {
                 movieAdapter.updateMovies(section.getMovies());
