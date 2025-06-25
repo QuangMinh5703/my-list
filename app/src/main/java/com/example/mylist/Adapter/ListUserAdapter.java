@@ -15,12 +15,10 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ListUs
     private Context context;
     private static OnDeleteUserClickListener listener;
 
-    // ✅ Interface callback
     public interface OnDeleteUserClickListener {
         void onClick(User user, View view);
     }
 
-    // ✅ Setter để gán callback từ Activity
     public void setOnDeleteUserClickListener(OnDeleteUserClickListener listener) {
         this.listener = listener;
     }
@@ -50,7 +48,7 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ListUs
     }
 
     public static class ListUserViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvUserName; //Hien thi ten nguoi dung
+        private TextView tvUserName;
 
         public ListUserViewHolder(@NonNull View itemView) {
             super(itemView);

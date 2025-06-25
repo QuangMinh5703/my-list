@@ -103,16 +103,16 @@ public class ListUserActivity extends AppCompatActivity {
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userList.clear(); // Xóa danh sách cũ trước khi thêm dữ liệu mới
+                userList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     if (user != null && user.getUsername() != null) {
                         if (!user.getUsername().equals("admin")) {
-                            userList.add(user); // Thêm user không phải admin
+                            userList.add(user);
                         }
                     }
                 }
-                userAdapter.notifyDataSetChanged(); // Cập nhật adapter
+                userAdapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

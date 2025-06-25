@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initFirebase() {
         userRef = FirebaseDatabase.getInstance().getReference("Users");
-        mAuth = FirebaseAuth.getInstance(); // Khởi tạo FirebaseAuth
+        mAuth = FirebaseAuth.getInstance();
     }
 
     private void setListener() {
